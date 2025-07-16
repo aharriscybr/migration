@@ -21,11 +21,13 @@ function Gen-Workload ( $workload ) {
     Add-Content $resourceFileTemp -Value "- !host"
     Add-Content $resourceFileTemp -Value "  id: $wid_name"
     Add-Content $resourceFileTemp -Value "  annotations:"
+    Add-Content $resourceFileTemp -Value "    Generated: $t"
     $wid_anno.ForEach({
         $annotationKey = $_.name
         $annotationValue = $_.value
         Add-Content $resourceFileTemp -Value "    ${annotationKey}: $annotationValue"
     })
+    Add-Content $resourceFileTemp -Value $whitespace
     Add-Content $resourceFileTemp -Value "- !grant"
     Add-Content $resourceFileTemp -Value "  role: !group authenticators"
     Add-Content $resourceFileTemp -Value "  member: !host $wid_name"
