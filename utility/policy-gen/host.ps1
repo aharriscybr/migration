@@ -8,13 +8,14 @@ function Gen-Workload ( $workload ) {
     $whitespace     = ""
 
     $workloadEntityID = parseEntity -e $wid -s ":"
+    $clean_wid = $workloadEntityID[2] | ForEach-Object { $_ -replace "/", "."}
 
     $wid_anno = $workload.annotations
     $wid_name = $workloadEntityID[2]
 
     ####
 
-    $thisResourceFile = "tmp/$t.$wid_name.declare.yml"
+    $thisResourceFile = "tmp/workloads/$t.$clean_wid.declare.yml"
     $resourceFileTemp = New-Item -ItemType "File" -Force $thisResourceFile
     log -message $thisResourceFile
     
@@ -27,9 +28,10 @@ function Gen-Workload ( $workload ) {
         $annotationValue = $_.value
         Add-Content $resourceFileTemp -Value "    ${annotationKey}: $annotationValue"
     })
-    Add-Content $resourceFileTemp -Value $whitespace
-    Add-Content $resourceFileTemp -Value "- !grant"
-    Add-Content $resourceFileTemp -Value "  role: !group authenticators"
-    Add-Content $resourceFileTemp -Value "  member: !host $wid_name"
+
+    # Add-Content $resourceFileTemp -Value $whitespace
+    # Add-Content $resourceFileTemp -Value "- !grant"
+    # Add-Content $resourceFileTemp -Value "  role: !group authenticators"
+    # Add-Content $resourceFileTemp -Value "  member: !host $wid_name"
     
 }
