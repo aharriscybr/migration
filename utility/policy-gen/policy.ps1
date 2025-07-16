@@ -15,9 +15,11 @@ function Gen-Policy ( $policy ) {
 
     ####
 
-    $thisResourceFile = "tmp/policies/$t.$clean_poid.declare.yml"
+    $thisResourceFile = "tmp/policies/$clean_poid/00_$t.$clean_poid.declare.yml"
+    $thisPolicyHistoryFile = "tmp/policies/$clean_poid/policy_versions.json"
+
     $resourceFileTemp = New-Item -ItemType "File" -Force $thisResourceFile
-    log -message $thisResourceFile
+    $historyFileTemp = New-Item -ItemType "File" -Force $thisPolicyHistoryFile
     
     Add-Content $resourceFileTemp -Value "- !host"
     Add-Content $resourceFileTemp -Value "  id: $poid_name"
@@ -28,5 +30,8 @@ function Gen-Policy ( $policy ) {
         $annotationValue = $_.value
         Add-Content $resourceFileTemp -Value "    ${annotationKey}: $annotationValue"
     })
+
+    $clean_history = $policy.policy_versions | ConvertTo-Json
+    Add-Content $thisPolicyHistoryFile -Value $clean_history
     
 }

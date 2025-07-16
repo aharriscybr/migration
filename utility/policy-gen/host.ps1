@@ -15,7 +15,7 @@ function Gen-Workload ( $workload ) {
 
     ####
 
-    $thisResourceFile = "tmp/workloads/$t.$clean_wid.declare.yml"
+    $thisResourceFile = "tmp/workloads/01_$t.$clean_wid.declare.yml"
     $resourceFileTemp = New-Item -ItemType "File" -Force $thisResourceFile
     log -message $thisResourceFile
     
