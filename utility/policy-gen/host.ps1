@@ -17,7 +17,8 @@ function Gen-Workload ( $workload ) {
 
     $thisResourceFile = "tmp/workloads/01_$t.$clean_wid.declare.yml"
     $resourceFileTemp = New-Item -ItemType "File" -Force $thisResourceFile
-    log -message $thisResourceFile
+    
+    log -message "Generating policy for [$wid] type [policy]"
     
     Add-Content $resourceFileTemp -Value "- !host"
     Add-Content $resourceFileTemp -Value "  id: $wid_name"

@@ -21,6 +21,7 @@ function Gen-Policy ( $policy ) {
     $resourceFileTemp = New-Item -ItemType "File" -Force $thisResourceFile
     $historyFileTemp = New-Item -ItemType "File" -Force $thisPolicyHistoryFile
     
+    log -message "Generating policy for [$poid_name] type [policy]"
     Add-Content $resourceFileTemp -Value "- !host"
     Add-Content $resourceFileTemp -Value "  id: $poid_name"
     Add-Content $resourceFileTemp -Value "  annotations:"
@@ -31,6 +32,7 @@ function Gen-Policy ( $policy ) {
         Add-Content $resourceFileTemp -Value "    ${annotationKey}: $annotationValue"
     })
 
+    log -message "Retaining history for [$poid_name]"
     $clean_history = $policy.policy_versions | ConvertTo-Json
     Add-Content $historyFileTemp -Value $clean_history
     
