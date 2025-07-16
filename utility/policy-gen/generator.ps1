@@ -1,1 +1,1 @@
-. ./host.ps1
+. ./utility/policy-gen/host.ps1

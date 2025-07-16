@@ -25,7 +25,8 @@ function log(){
         $message = "$functionName()$($spacing): $message"
     }
 
-    Write-Host "-LogName "Application" -Source "CyberArk Secrets Manager - Self Hosted Migration Service" -EventID 43868 -EntryType Information -Message $message"
+    Write-Host $message
+    #Write-Host "-LogName "Application" -Source "CyberArk Secrets Manager - Self Hosted Migration Service" -EventID 43868 -EntryType Information -Message $message"
 
 }
 
@@ -35,7 +36,7 @@ function parseEntity( $e, $s ){
 
     $option = [System.StringSplitOptions]::RemoveEmptyEntries
 
-    $returnEntity = $e.split("{$s}", $option)
+    $returnEntity = $e.split($s, $option)
 
     return $returnEntity
 
@@ -99,7 +100,8 @@ function getWorkloads ( $authz ) {
 
         $workloads = Invoke-RestMethod -Uri "https://$CONJUR_URL/resources/$CONJUR_ACCOUNT" -Body $queryParams -Method GET -Headers $authz -SkipCertificateCheck -ErrorAction SilentlyContinue
 
-        log $workloads
+        $cnt = $workloads.length
+        log -message "Workload Count: $cnt"
 
         return $workloads
 
