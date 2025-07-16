@@ -32,6 +32,6 @@ function Gen-Policy ( $policy ) {
     })
 
     $clean_history = $policy.policy_versions | ConvertTo-Json
-    Add-Content $thisPolicyHistoryFile -Value $clean_history
+    Add-Content $historyFileTemp -Value $clean_history
     
 }
