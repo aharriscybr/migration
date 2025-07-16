@@ -1,29 +1,29 @@
 . ./utility/lib/csm-sh.ps1
 
-function Gen-Workload ( $workload ) {
+function Gen-Policy ( $policy ) {
 
     $t = Get-Date -Format o | ForEach-Object { $_ -replace ":", "." }
 
-    $wid = $workload.id
+    $poid = $policy.id
     $whitespace     = ""
 
-    $workloadEntityID = parseEntity -e $wid -s ":"
-    $clean_wid = $workloadEntityID[2] | ForEach-Object { $_ -replace "/", "."}
+    $policyEntityID = parseEntity -e $poid -s ":"
+    $clean_poid = $policyEntityID[2] | ForEach-Object { $_ -replace "/", "."}
 
-    $wid_anno = $workload.annotations
-    $wid_name = $workloadEntityID[2]
+    $poid_anno = $policy.annotations
+    $poid_name = $policyEntityID[2]
 
     ####
 
-    $thisResourceFile = "tmp/workloads/$t.$clean_wid.declare.yml"
+    $thisResourceFile = "tmp/policies/$t.$clean_poid.declare.yml"
     $resourceFileTemp = New-Item -ItemType "File" -Force $thisResourceFile
     log -message $thisResourceFile
     
     Add-Content $resourceFileTemp -Value "- !host"
-    Add-Content $resourceFileTemp -Value "  id: $wid_name"
+    Add-Content $resourceFileTemp -Value "  id: $poid_name"
     Add-Content $resourceFileTemp -Value "  annotations:"
     Add-Content $resourceFileTemp -Value "    Generated: $t"
-    $wid_anno.ForEach({
+    $poid_anno.ForEach({
         $annotationKey = $_.name
         $annotationValue = $_.value
         Add-Content $resourceFileTemp -Value "    ${annotationKey}: $annotationValue"

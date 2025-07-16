@@ -113,6 +113,30 @@ function getWorkloads ( $authz ) {
 
 }
 
+function getPolicies ( $authz ) {
+
+    $queryParams = @{
+        kind = "policy"
+        #search = "delegation/consumers"
+    }
+
+    try {
+
+        $policies = Invoke-RestMethod -Uri "https://$CONJUR_URL/resources/$CONJUR_ACCOUNT" -Body $queryParams -Method GET -Headers $authz -SkipCertificateCheck -ErrorAction SilentlyContinue
+
+        $cnt = $policies.length
+        log -message "Policy Count: $cnt"
+
+        return $policies
+
+    } catch {
+
+        log $_
+
+    }
+
+}
+
 function getWorkloadMetadata ( $workload, $authz ) {
 
     try {
@@ -128,9 +152,5 @@ function getWorkloadMetadata ( $workload, $authz ) {
         log $_
 
     }
-
-}
-
-function getWorkloadMemberships ( $workload, $authz) {
 
 }
