@@ -1,6 +1,6 @@
 . ./utility/lib/csm-sh.ps1
 
-function Gen-Policy ( $group ) {
+function Gen-Group ( $group ) {
 
     $t = Get-Date -Format o | ForEach-Object { $_ -replace ":", "." }
 

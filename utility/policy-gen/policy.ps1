@@ -13,6 +13,22 @@ function Gen-Policy ( $policy ) {
     $poid_anno = $policy.annotations
     $poid_name = $policyEntityID[2]
 
+    $po_path   = parseEntity -e $poid_name -s "/"
+    
+    log -message $po_path.length
+
+    if ( $po_path.length -eq 1 ){
+
+        $poid_id   = $po_path[-1]
+        $po_api    = $poid_name -Replace "(\/(\w+))$"
+
+    } else {
+
+        $poid_id   = $po_path
+        $po_api = $poid_name
+    }
+    
+
     ####
 
     $thisResourceFile = "tmp/policies/$clean_poid/00_$t.$clean_poid.declare.yml"
@@ -20,20 +36,26 @@ function Gen-Policy ( $policy ) {
 
     $resourceFileTemp = New-Item -ItemType "File" -Force $thisResourceFile
     $historyFileTemp = New-Item -ItemType "File" -Force $thisPolicyHistoryFile
+
+    log -message "Retaining history for [$poid_name]"
+    $clean_history = $policy.policy_versions | ConvertTo-Json
+    Add-Content $historyFileTemp -Value $clean_history
     
     log -message "Generating policy for [$poid_name] type [policy]"
-    Add-Content $resourceFileTemp -Value "- !host"
-    Add-Content $resourceFileTemp -Value "  id: $poid_name"
+    
+
+    Add-Content $resourceFileTemp -Value "# Loaded into $po_api via REST"
+    Add-Content $resourceFileTemp -Value "# CLI Example load - conjur policy load -b $po_api -f $thisResourceFile"
+    Add-Content $resourceFileTemp -Value "# $po_path"
+    
+    Add-Content $resourceFileTemp -Value "- !policy"
+    Add-Content $resourceFileTemp -Value "  id: $poid_id"
     Add-Content $resourceFileTemp -Value "  annotations:"
     Add-Content $resourceFileTemp -Value "    Generated: $t"
     $poid_anno.ForEach({
         $annotationKey = $_.name
         $annotationValue = $_.value
         Add-Content $resourceFileTemp -Value "    ${annotationKey}: $annotationValue"
-    })
-
-    log -message "Retaining history for [$poid_name]"
-    $clean_history = $policy.policy_versions | ConvertTo-Json
-    Add-Content $historyFileTemp -Value $clean_history
+    }) 
     
 }
