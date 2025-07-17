@@ -32,7 +32,7 @@ function log(){
 
 function parseEntity( $e, $s ){
 
-    log -message "Parsing [$e]"
+    log -message "Parsing [$e] with delimiter [$s]"
 
     $option = [System.StringSplitOptions]::RemoveEmptyEntries
 
